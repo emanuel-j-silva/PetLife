@@ -27,13 +27,32 @@ class MainActivity : AppCompatActivity() {
                     val color = data.getStringExtra("color") ?: ""
                     val size = data.getStringExtra("size") ?: ""
 
-                    amb.nameTv.text = name
-                    amb.birthTv.text = birthDate
-                    amb.typeTv.text = type
-                    amb.colorTv.text = color
-                    amb.sizeTv.text = size
+                    val pet = Pet(
+                        name = name,
+                        birthDate = birthDate,
+                        type = Type.valueOf(type),
+                        color = color,
+                        size = Size.valueOf(size)
+                    )
+
+                    amb.nameTv.text = pet.name
+                    amb.birthTv.text = pet.birthDate
+                    amb.typeTv.text = pet.type.name
+                    amb.colorTv.text = pet.color
+                    amb.sizeTv.text = pet.size.name
                 }
             }
+        }
+
+        amb.altPetInfoTv.setOnClickListener {
+            val intent = Intent(this,EditPetActivity::class.java).apply{
+                putExtra("name", amb.nameTv.text.toString())
+                putExtra("birthDate", amb.birthTv.text.toString())
+                putExtra("type", amb.typeTv.text.toString())
+                putExtra("color", amb.colorTv.text.toString())
+                putExtra("size", amb.sizeTv.text.toString())
+            }
+            parl.launch(intent)
         }
     }
 }
