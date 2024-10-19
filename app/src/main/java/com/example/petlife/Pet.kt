@@ -1,10 +1,11 @@
 package com.example.petlife
 
+import java.io.Serializable
+
 data class Pet(
     val name: String,
     val birthDate: String,
     val type: Type,
     val color: String,
     val size: Size,
-    val visits: Visits
-)
+) : Serializable
