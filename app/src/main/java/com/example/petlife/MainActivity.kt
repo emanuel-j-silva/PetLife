@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var parl:ActivityResultLauncher<Intent>
+    private var pet: Pet? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,32 +28,35 @@ class MainActivity : AppCompatActivity() {
                     val color = data.getStringExtra("color") ?: ""
                     val size = data.getStringExtra("size") ?: ""
 
-                    val pet = Pet(
+                    pet = Pet(
                         name = name,
                         birthDate = birthDate,
                         type = Type.valueOf(type),
                         color = color,
                         size = Size.valueOf(size)
                     )
-
-                    amb.nameTv.text = pet.name
-                    amb.birthTv.text = pet.birthDate
-                    amb.typeTv.text = pet.type.name
-                    amb.colorTv.text = pet.color
-                    amb.sizeTv.text = pet.size.name
+                    pet?.let { updatePetUi(it) }
                 }
             }
         }
 
         amb.altPetInfoTv.setOnClickListener {
             val intent = Intent(this,EditPetActivity::class.java).apply{
-                putExtra("name", amb.nameTv.text.toString())
-                putExtra("birthDate", amb.birthTv.text.toString())
-                putExtra("type", amb.typeTv.text.toString())
-                putExtra("color", amb.colorTv.text.toString())
-                putExtra("size", amb.sizeTv.text.toString())
+                putExtra("name", pet?.name ?: "")
+                putExtra("birthDate", pet?.birthDate ?: "")
+                putExtra("type", pet?.type ?: "")
+                putExtra("color", pet?.color ?: "")
+                putExtra("size", pet?.size ?: "")
             }
             parl.launch(intent)
         }
+    }
+
+    private fun updatePetUi(pet: Pet){
+        amb.nameTv.text = pet.name
+        amb.birthTv.text = pet.birthDate
+        amb.typeTv.text = pet.type.name
+        amb.colorTv.text = pet.color
+        amb.sizeTv.text = pet.size.name
     }
 }
