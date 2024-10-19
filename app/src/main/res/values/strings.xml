@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">PetLife</string>
     <string-array name="types">
-        <item>Cachorro</item>
-        <item>Gato</item>
+        <item>DOG</item>
+        <item>CAT</item>
     </string-array>
     <string-array name="sizes">
-        <item>Pequeno</item>
-        <item>Médio</item>
-        <item>Grande</item>
+        <item>SMALL</item>
+        <item>MEDIUM</item>
+        <item>LARGE</item>
     </string-array>
 </resources>
