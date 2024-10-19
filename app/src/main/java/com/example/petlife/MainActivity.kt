@@ -6,6 +6,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petlife.databinding.ActivityMainBinding
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class MainActivity : AppCompatActivity() {
     private val amb: ActivityMainBinding by lazy {
@@ -33,7 +35,9 @@ class MainActivity : AppCompatActivity() {
                         birthDate = birthDate,
                         type = Type.valueOf(type),
                         color = color,
-                        size = Size.valueOf(size)
+                        size = Size.valueOf(size),
+                        lastPetShopVisit = LocalDateTime.now()
+                            .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
                     )
                     pet?.let { updatePetUi(it) }
                 }
@@ -47,6 +51,7 @@ class MainActivity : AppCompatActivity() {
                 putExtra("type", pet?.type ?: Type.DOG.name)
                 putExtra("color", pet?.color ?: "")
                 putExtra("size", pet?.size ?: Size.MEDIUM.name)
+                putExtra("lastPetShopVisit", pet?.lastPetShopVisit)
             }
             parl.launch(intent)
         }
@@ -58,5 +63,6 @@ class MainActivity : AppCompatActivity() {
         amb.typeTv.text = pet.type.name
         amb.colorTv.text = pet.color
         amb.sizeTv.text = pet.size.name
+        amb.lastPetshopTv.text = pet.lastPetShopVisit
     }
 }

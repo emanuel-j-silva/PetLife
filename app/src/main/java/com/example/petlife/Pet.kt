@@ -6,4 +6,5 @@ data class Pet(
     val type: Type,
     val color: String,
     val size: Size,
+    val lastPetShopVisit: String
 )

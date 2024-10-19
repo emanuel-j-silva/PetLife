@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petlife.databinding.ActivityEditPetBinding
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class EditPetActivity : AppCompatActivity() {
     private val apb: ActivityEditPetBinding by lazy {
@@ -36,7 +38,8 @@ class EditPetActivity : AppCompatActivity() {
             birthDate = intent.getStringExtra("birthDate") ?: "",
             type = intent.getStringExtra("type")?.let { Type.valueOf(it) } ?: Type.DOG,
             color = intent.getStringExtra("color") ?: "",
-            size = intent.getStringExtra("size")?.let { Size.valueOf(it) } ?:Size.MEDIUM
+            size = intent.getStringExtra("size")?.let { Size.valueOf(it) } ?:Size.MEDIUM,
+            lastPetShopVisit = intent.getStringExtra("lastPetShopVisit") ?: ""
         )
 
         pet?.let { fillEditFields(it) }
@@ -47,7 +50,9 @@ class EditPetActivity : AppCompatActivity() {
                 birthDate = apb.birthEt.text.toString(),
                 type = Type.valueOf(apb.typeSp.selectedItem.toString()),
                 color = apb.colorEt.text.toString(),
-                size = Size.valueOf(apb.sizeSp.selectedItem.toString())
+                size = Size.valueOf(apb.sizeSp.selectedItem.toString()),
+                lastPetShopVisit = LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
             )
 
             val resultIntent = Intent().apply {
