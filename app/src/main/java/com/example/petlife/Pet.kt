@@ -1,11 +1,13 @@
 package com.example.petlife
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Pet(
     val name: String,
     val birthDate: String,
     val type: Type,
     val color: String,
     val size: Size,
-) : Serializable
+) : Parcelable
