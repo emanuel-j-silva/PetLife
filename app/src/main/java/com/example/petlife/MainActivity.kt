@@ -14,14 +14,16 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private lateinit var parl:ActivityResultLauncher<Intent>
+    private lateinit var petLauncher:ActivityResultLauncher<Intent>
+    private lateinit var vetLauncher:ActivityResultLauncher<Intent>
     private var pet: Pet? = null
+    private var lastVeterinarianVisit: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(amb.root)
 
-        parl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        petLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if(result.resultCode == RESULT_OK){
                 result.data?.let { data->
                     val name = data.getStringExtra("name") ?: ""
@@ -53,8 +55,26 @@ class MainActivity : AppCompatActivity() {
                 putExtra("size", pet?.size ?: Size.MEDIUM.name)
                 putExtra("lastPetShopVisit", pet?.lastPetShopVisit)
             }
-            parl.launch(intent)
+            petLauncher.launch(intent)
         }
+
+        vetLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK){
+                result.data?.let { data->
+                    val lastVetVisit = data.getStringExtra("lastVeterinarianVisit")
+                    lastVeterinarianVisit = lastVetVisit
+                }
+                lastVeterinarianVisit?.let { amb.lastVeterinarianTv.text = lastVeterinarianVisit }
+            }
+        }
+
+        amb.altLastVeterinarianTv.setOnClickListener{
+            val intent = Intent(this,LastVetActivity::class.java).apply {
+                putExtra("lastVeterinarianVisit", lastVeterinarianVisit)
+            }
+            vetLauncher.launch(intent)
+        }
+
     }
 
     private fun updatePetUi(pet: Pet){
