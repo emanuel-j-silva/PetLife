@@ -2,11 +2,7 @@ package com.example.petlife
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.petlife.databinding.ActivityEditPetBinding
 import com.example.petlife.databinding.ActivityLastVetBinding
 
 class LastVetActivity : AppCompatActivity() {
@@ -34,6 +30,6 @@ class LastVetActivity : AppCompatActivity() {
     }
 
     private fun fillEditField(string: String){
-        alb.textTv.text = string
+        alb.textTv.setText(string)
     }
 }
