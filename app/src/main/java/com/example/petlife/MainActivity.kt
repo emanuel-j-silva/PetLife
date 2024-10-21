@@ -16,8 +16,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var petLauncher:ActivityResultLauncher<Intent>
     private lateinit var vetLauncher:ActivityResultLauncher<Intent>
+    private lateinit var vacLauncher:ActivityResultLauncher<Intent>
+
     private var pet: Pet? = null
     private var lastVeterinarianVisit: String? = null
+    private var lastVaccination: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +77,23 @@ class MainActivity : AppCompatActivity() {
                 putExtra("lastVeterinarianVisit", lastVeterinarianVisit)
             }
             vetLauncher.launch(intent)
+        }
+
+        vacLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK){
+                result.data?.let { data->
+                    val lastVac = data.getStringExtra("lastVaccination")
+                    lastVaccination = lastVac
+                }
+                lastVaccination?.let { amb.lastVaccinationTv.text = lastVaccination }
+            }
+        }
+
+        amb.altLastVaccinationTv.setOnClickListener{
+            val intent = Intent(this,LastVacActivity::class.java).apply {
+                putExtra("lastVaccination", lastVaccination)
+            }
+            vacLauncher.launch(intent)
         }
 
     }
