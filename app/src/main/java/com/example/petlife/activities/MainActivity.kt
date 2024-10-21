@@ -102,9 +102,9 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, EditPetActivity::class.java).apply{
                     putExtra("name", pet?.name ?: "")
                     putExtra("birthDate", pet?.birthDate ?: "")
-                    putExtra("type", pet?.type ?: Type.DOG.name)
+                    putExtra("type", pet?.type?.name ?: Type.DOG.name)
                     putExtra("color", pet?.color ?: "")
-                    putExtra("size", pet?.size ?: Size.MEDIUM.name)
+                    putExtra("size", pet?.size?.name ?: Size.MEDIUM.name)
                 }
                 petLauncher.launch(intent)
                 true
