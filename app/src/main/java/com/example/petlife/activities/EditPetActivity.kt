@@ -9,8 +9,6 @@ import com.example.petlife.databinding.ActivityEditPetBinding
 import com.example.petlife.pet.Pet
 import com.example.petlife.pet.Size
 import com.example.petlife.pet.Type
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class EditPetActivity : AppCompatActivity() {
     private val apb: ActivityEditPetBinding by lazy {
