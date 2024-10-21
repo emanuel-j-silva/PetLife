@@ -25,7 +25,7 @@
         android:text="Última ida ao veterinário"
         android:textSize="25sp"
         android:gravity="center_horizontal"
-        android:padding="100sp"
+        android:padding="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTv" />
@@ -41,6 +41,53 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subtitleTv" />
 
+    <TextView
+        android:id="@+id/telephoneTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Telefone para contato"
+        android:textSize="25sp"
+        android:gravity="center_horizontal"
+        android:padding="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textTv" />
+
+    <EditText
+        android:id="@+id/telephoneEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:gravity="center_horizontal"
+        android:padding="25sp"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/telephoneTv" />
+
+    <TextView
+        android:id="@+id/siteTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Site para marcação de consultas"
+        android:textSize="25sp"
+        android:gravity="center_horizontal"
+        android:padding="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/telephoneEt" />
+
+    <EditText
+        android:id="@+id/siteEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:gravity="center_horizontal"
+        android:padding="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/siteTv" />
+
     <Button
         android:id="@+id/saveBt"
         android:layout_width="match_parent"
@@ -50,6 +97,6 @@
         android:layout_margin="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textTv" />
+        app:layout_constraintTop_toBottomOf="@id/siteEt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
