@@ -1,4 +1,4 @@
-package com.example.petlife
+package com.example.petlife.pet
 
 enum class Type {
     DOG,

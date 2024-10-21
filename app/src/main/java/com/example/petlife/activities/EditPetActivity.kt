@@ -1,4 +1,4 @@
-package com.example.petlife
+package com.example.petlife.activities
 
 import android.R
 import android.content.Intent
@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petlife.databinding.ActivityEditPetBinding
+import com.example.petlife.pet.Pet
+import com.example.petlife.pet.Size
+import com.example.petlife.pet.Type
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -38,8 +41,7 @@ class EditPetActivity : AppCompatActivity() {
             birthDate = intent.getStringExtra("birthDate") ?: "",
             type = intent.getStringExtra("type")?.let { Type.valueOf(it) } ?: Type.DOG,
             color = intent.getStringExtra("color") ?: "",
-            size = intent.getStringExtra("size")?.let { Size.valueOf(it) } ?:Size.MEDIUM,
-            lastPetShopVisit = intent.getStringExtra("lastPetShopVisit") ?: ""
+            size = intent.getStringExtra("size")?.let { Size.valueOf(it) } ?: Size.MEDIUM
         )
 
         pet?.let { fillEditFields(it) }
@@ -50,9 +52,7 @@ class EditPetActivity : AppCompatActivity() {
                 birthDate = apb.birthEt.text.toString(),
                 type = Type.valueOf(apb.typeSp.selectedItem.toString()),
                 color = apb.colorEt.text.toString(),
-                size = Size.valueOf(apb.sizeSp.selectedItem.toString()),
-                lastPetShopVisit = LocalDateTime.now()
-                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                size = Size.valueOf(apb.sizeSp.selectedItem.toString())
             )
 
             val resultIntent = Intent().apply {

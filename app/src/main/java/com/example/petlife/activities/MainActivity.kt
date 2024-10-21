@@ -1,4 +1,4 @@
-package com.example.petlife
+package com.example.petlife.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,9 +8,11 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.petlife.R
 import com.example.petlife.databinding.ActivityMainBinding
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import com.example.petlife.pet.Pet
+import com.example.petlife.pet.Size
+import com.example.petlife.pet.Type
 
 class MainActivity : AppCompatActivity() {
     private val amb: ActivityMainBinding by lazy {
@@ -47,9 +49,7 @@ class MainActivity : AppCompatActivity() {
                         birthDate = birthDate,
                         type = Type.valueOf(type),
                         color = color,
-                        size = Size.valueOf(size),
-                        lastPetShopVisit = LocalDateTime.now()
-                            .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                        size = Size.valueOf(size)
                     )
                     pet?.let { updatePetUi(it) }
                 }
@@ -86,26 +86,25 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.editPetInfoMi -> {
-                val intent = Intent(this,EditPetActivity::class.java).apply{
+                val intent = Intent(this, EditPetActivity::class.java).apply{
                     putExtra("name", pet?.name ?: "")
                     putExtra("birthDate", pet?.birthDate ?: "")
                     putExtra("type", pet?.type ?: Type.DOG.name)
                     putExtra("color", pet?.color ?: "")
                     putExtra("size", pet?.size ?: Size.MEDIUM.name)
-                    putExtra("lastPetShopVisit", pet?.lastPetShopVisit)
                 }
                 petLauncher.launch(intent)
                 true
             }
             R.id.editLastVaccinationMi -> {
-                val intent = Intent(this,LastVacActivity::class.java).apply {
+                val intent = Intent(this, LastVacActivity::class.java).apply {
                     putExtra("lastVaccination", lastVaccination)
                 }
                 vacLauncher.launch(intent)
                 true
             }
             R.id.editLastVeterinarianMi -> {
-                val intent = Intent(this,LastVetActivity::class.java).apply {
+                val intent = Intent(this, LastVetActivity::class.java).apply {
                     putExtra("lastVeterinarianVisit", lastVeterinarianVisit)
                 }
                 vetLauncher.launch(intent)
@@ -125,6 +124,5 @@ class MainActivity : AppCompatActivity() {
         amb.typeTv.text = pet.type.name
         amb.colorTv.text = pet.color
         amb.sizeTv.text = pet.size.name
-        amb.lastPetshopTv.text = pet.lastPetShopVisit
     }
 }

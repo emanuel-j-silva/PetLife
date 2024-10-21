@@ -1,4 +1,4 @@
-package com.example.petlife
+package com.example.petlife.activities
 
 import android.content.Intent
 import android.os.Bundle

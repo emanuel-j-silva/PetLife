@@ -1,4 +1,4 @@
-package com.example.petlife
+package com.example.petlife.pet
 
 data class Pet(
     val name: String,
@@ -6,5 +6,4 @@ data class Pet(
     val type: Type,
     val color: String,
     val size: Size,
-    val lastPetShopVisit: String
 )
