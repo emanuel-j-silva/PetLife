@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/editPetInfoMi"
+        android:title="Alterar Infos do Pet"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:title="Alterações"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/editLastVaccinationMi"
+                android:title="Alterar Última Vacinação" />
+            <item
+                android:id="@+id/editLastVeterinarianMi"
+                android:title="Alterar Última Ida ao Veterinário" />
+            <item
+                android:id="@+id/editLastPetShopMi"
+                android:title="Alterar Última Ida ao Pet Shop" />
+        </menu>
+    </item>
+</menu>
