@@ -22,7 +22,7 @@
         android:id="@+id/subtitleTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ùltima ida ao veterinário"
+        android:text="Última ida ao veterinário"
         android:textSize="25sp"
         android:gravity="center_horizontal"
         android:padding="100sp"
