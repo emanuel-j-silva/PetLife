@@ -22,10 +22,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var petLauncher:ActivityResultLauncher<Intent>
     private lateinit var vetLauncher:ActivityResultLauncher<Intent>
     private lateinit var vacLauncher:ActivityResultLauncher<Intent>
+    private lateinit var shopLauncher:ActivityResultLauncher<Intent>
+
 
     private var pet: Pet? = null
     private var lastVeterinarianVisit: String? = null
     private var lastVaccination: String? = null
+    private var lastPetShopVisit: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +79,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        shopLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK){
+                result.data?.let { data->
+                    val lastShop = data.getStringExtra("lastPetShopVisit")
+                    lastPetShopVisit = lastShop
+                }
+                lastPetShopVisit?.let { amb.lastPetshopTv.text = lastPetShopVisit }
+            }
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -111,7 +124,10 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.editLastPetShopMi -> {
-
+                val intent = Intent(this, LastPetShopActivity::class.java).apply {
+                    putExtra("lastPetShopVisit", lastPetShopVisit)
+                }
+                shopLauncher.launch(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
