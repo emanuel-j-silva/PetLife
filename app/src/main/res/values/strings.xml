@@ -9,4 +9,9 @@
         <item>MEDIUM</item>
         <item>LARGE</item>
     </string-array>
+    <string-array name="events">
+        <item>VACCINE</item>
+        <item>VETERINARIAN</item>
+        <item>PET SHOP</item>
+    </string-array>
 </resources>

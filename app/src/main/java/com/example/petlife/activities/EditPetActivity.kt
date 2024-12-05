@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petlife.databinding.ActivityEditPetBinding
-import com.example.petlife.pet.Pet
-import com.example.petlife.pet.Size
-import com.example.petlife.pet.Type
+import com.example.petlife.model.pet.Pet
+import com.example.petlife.model.pet.Size
+import com.example.petlife.model.pet.PetType
 
 class EditPetActivity : AppCompatActivity() {
     private val apb: ActivityEditPetBinding by lazy {
@@ -17,7 +17,7 @@ class EditPetActivity : AppCompatActivity() {
 
     private var pet: Pet? = null
 
-    private lateinit var typeAdapter: ArrayAdapter<Type>
+    private lateinit var typeAdapter: ArrayAdapter<PetType>
     private lateinit var sizeAdapter: ArrayAdapter<Size>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +25,7 @@ class EditPetActivity : AppCompatActivity() {
         setContentView(apb.root)
 
         typeAdapter = ArrayAdapter(this, R.layout.simple_spinner_item,
-            Type.entries)
+            PetType.entries)
         typeAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         apb.typeSp.adapter = typeAdapter
 
@@ -37,7 +37,7 @@ class EditPetActivity : AppCompatActivity() {
         pet = Pet(
             name = intent.getStringExtra("name") ?: "",
             birthDate = intent.getStringExtra("birthDate") ?: "",
-            type = intent.getStringExtra("type")?.let { Type.valueOf(it) } ?: Type.DOG,
+            type = intent.getStringExtra("type")?.let { PetType.valueOf(it) } ?: PetType.DOG,
             color = intent.getStringExtra("color") ?: "",
             size = intent.getStringExtra("size")?.let { Size.valueOf(it) } ?: Size.MEDIUM
         )
@@ -48,7 +48,7 @@ class EditPetActivity : AppCompatActivity() {
             pet = Pet(
                 name = apb.nameEt.text.toString(),
                 birthDate = apb.birthEt.text.toString(),
-                type = Type.valueOf(apb.typeSp.selectedItem.toString()),
+                type = PetType.valueOf(apb.typeSp.selectedItem.toString()),
                 color = apb.colorEt.text.toString(),
                 size = Size.valueOf(apb.sizeSp.selectedItem.toString())
             )

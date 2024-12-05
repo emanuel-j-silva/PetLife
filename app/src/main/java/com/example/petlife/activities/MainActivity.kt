@@ -18,9 +18,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.petlife.R
 import com.example.petlife.databinding.ActivityMainBinding
-import com.example.petlife.pet.Pet
-import com.example.petlife.pet.Size
-import com.example.petlife.pet.Type
+import com.example.petlife.model.pet.Pet
+import com.example.petlife.model.pet.Size
+import com.example.petlife.model.pet.PetType
 
 class MainActivity : AppCompatActivity() {
     private val amb: ActivityMainBinding by lazy {
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                         pet = Pet(
                             name = name,
                             birthDate = birthDate,
-                            type = Type.valueOf(type),
+                            type = PetType.valueOf(type),
                             color = color,
                             size = Size.valueOf(size)
                         )
@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, EditPetActivity::class.java).apply {
                     putExtra("name", pet?.name ?: "")
                     putExtra("birthDate", pet?.birthDate ?: "")
-                    putExtra("type", pet?.type?.name ?: Type.DOG.name)
+                    putExtra("type", pet?.type?.name ?: PetType.DOG.name)
                     putExtra("color", pet?.color ?: "")
                     putExtra("size", pet?.size?.name ?: Size.MEDIUM.name)
                 }

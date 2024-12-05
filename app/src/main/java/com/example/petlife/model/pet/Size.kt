@@ -1,4 +1,4 @@
-package com.example.petlife.pet
+package com.example.petlife.model.pet
 
 enum class Size {
     SMALL,
