@@ -49,8 +49,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(amb.root)
 
-        val toolbar: Toolbar = findViewById(amb.toolbarTb.id)
-        setSupportActionBar(toolbar)
+        amb.toolbarIn.toolbar.let {
+            it.subtitle = "Pet List"
+            setSupportActionBar(it)
+        }
 
         pcarl = registerForActivityResult(ActivityResultContracts.RequestPermission())
         { permission ->
@@ -152,12 +154,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.activity_main_menu, menu)
+        menuInflater.inflate(R.menu.add_item_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.editItemMi -> {
+                petLauncher.launch(Intent(this, EditPetActivity::class.java))
+                true
+            }
+
             R.id.editPetInfoMi -> {
                 val intent = Intent(this, EditPetActivity::class.java).apply {
                     putExtra("name", pet?.name ?: "")
