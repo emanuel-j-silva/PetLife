@@ -61,16 +61,25 @@ class PetSqliteImpl(context: Context): PetDAO {
     }
 
     override fun findAllPets(): MutableList<Pet> {
-        TODO("Not yet implemented")
+        val petList = mutableListOf<Pet>()
+
+        val cursor = petDatabase.rawQuery("SELECT * FROM $PET_TABLE", null)
+        while (cursor.moveToNext()){
+            petList.add(cursorToPet(cursor))
+        }
+
+        return petList
     }
 
-    override fun updatePet(pet: Pet): Int {
-        TODO("Not yet implemented")
-    }
+    override fun updatePet(pet: Pet) = petDatabase.update(
+        PET_TABLE, petToContentValue(pet), "$NAME_COLUMN = ?", arrayOf(pet.name)
+    )
 
-    override fun deletePet(name: String): Int {
-        TODO("Not yet implemented")
-    }
+    override fun deletePet(name: String) = petDatabase.delete(
+        PET_TABLE,
+        "$NAME_COLUMN = ?",
+        arrayOf(name)
+    )
 
     private fun petToContentValue(pet: Pet) = ContentValues().apply {
         with(pet) {
@@ -91,5 +100,4 @@ class PetSqliteImpl(context: Context): PetDAO {
             Size.valueOf(getString(getColumnIndexOrThrow(SIZE_COLUMN)))
         )
     }
-
 }
