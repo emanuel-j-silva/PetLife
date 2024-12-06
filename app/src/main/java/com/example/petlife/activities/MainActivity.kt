@@ -1,18 +1,21 @@
 package com.example.petlife.activities
 
 import android.content.Intent
-import android.content.Intent.ACTION_VIEW
 import android.os.Build
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView.AdapterContextMenuInfo
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petlife.R
 import com.example.petlife.controller.MainController
 import com.example.petlife.databinding.ActivityMainBinding
-import com.example.petlife.model.Constant
+import com.example.petlife.model.Constant.PET
+import com.example.petlife.model.Constant.VIEW_MODE
 import com.example.petlife.model.pet.Pet
 
 class MainActivity : AppCompatActivity() {
@@ -39,9 +42,9 @@ class MainActivity : AppCompatActivity() {
         parl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 val pet = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU){
-                    result.data?.getParcelableExtra<Pet>(Constant.PET)
+                    result.data?.getParcelableExtra<Pet>(PET)
                 }else{
-                    result.data?.getParcelableExtra(Constant.PET,Pet::class.java)
+                    result.data?.getParcelableExtra(PET,Pet::class.java)
                 }
                 pet?.let { receivedPet ->
                     val position = petList.indexOfFirst { it.name == receivedPet.name }
@@ -64,6 +67,17 @@ class MainActivity : AppCompatActivity() {
 
         fillPetList()
 
+        amb.petsLv.adapter = petAdapter
+        amb.petsLv.setOnItemClickListener { _, _, position, _ ->
+            Intent(this, EditPetActivity::class.java).apply {
+                putExtra(PET, petList[position])
+                putExtra(VIEW_MODE, true)
+                startActivity(this)
+            }
+        }
+
+        registerForContextMenu(amb.petsLv)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -78,6 +92,35 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
+            else -> {
+                false
+            }
+        }
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) = menuInflater.inflate(R.menu.add_item_menu, menu)
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val position = (item.menuInfo as AdapterContextMenuInfo).position
+        return when(item.itemId){
+            R.id.editPetMi -> {
+                Intent(this,EditPetActivity::class.java).apply {
+                    putExtra(PET,petList[position])
+                    putExtra(VIEW_MODE,false)
+                    parl.launch(this)
+                }
+                true
+            }
+            R.id.removePetMi -> {
+                mainController.removePet(petList[position].name)
+                petList.removeAt(position)
+                petAdapter.notifyDataSetChanged()
+                true
+            }
             else -> {
                 false
             }
