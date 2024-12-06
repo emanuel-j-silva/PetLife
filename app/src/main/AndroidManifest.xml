@@ -22,15 +22,6 @@
             android:name=".activities.EditEventActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.LastPetShopActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.LastVacActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.LastVetActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.EditPetActivity"
             android:exported="false" />
         <activity
