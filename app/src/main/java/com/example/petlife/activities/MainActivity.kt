@@ -2,6 +2,7 @@ package com.example.petlife.activities
 
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.petlife.R
 import com.example.petlife.controller.MainController
 import com.example.petlife.databinding.ActivityMainBinding
+import com.example.petlife.model.Constant
 import com.example.petlife.model.pet.Pet
 
 class MainActivity : AppCompatActivity() {
@@ -28,13 +30,32 @@ class MainActivity : AppCompatActivity() {
         MainController(this)
     }
 
-    private lateinit var petLauncher: ActivityResultLauncher<Intent>
-
-    private lateinit var piarl: ActivityResultLauncher<Intent>
+    private lateinit var parl: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(amb.root)
+
+        parl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val pet = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU){
+                    result.data?.getParcelableExtra<Pet>(Constant.PET)
+                }else{
+                    result.data?.getParcelableExtra(Constant.PET,Pet::class.java)
+                }
+                pet?.let { receivedPet ->
+                    val position = petList.indexOfFirst { it.name == receivedPet.name }
+                    if (position == -1){
+                        petList.add(receivedPet)
+                        mainController.insertPet(receivedPet)
+                    }else{
+                        petList[position] = receivedPet
+                        mainController.modifyPet(receivedPet)
+                    }
+                    petAdapter.notifyDataSetChanged()
+                }
+            }
+        }
 
         amb.toolbarIn.toolbar.let {
             it.subtitle = "Pet List"
@@ -42,14 +63,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         fillPetList()
-
-        piarl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                result.data?.data?.let {
-                    startActivity(Intent(ACTION_VIEW, it))
-                }
-            }
-        }
 
     }
 
@@ -61,7 +74,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.editItemMi -> {
-                petLauncher.launch(Intent(this, EditPetActivity::class.java))
+                parl.launch(Intent(this, EditPetActivity::class.java))
                 true
             }
 
