@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petlife.R
+import com.example.petlife.controller.MainController
 import com.example.petlife.databinding.ActivityMainBinding
 import com.example.petlife.model.pet.Pet
 import com.example.petlife.model.pet.Size
@@ -17,6 +18,16 @@ import com.example.petlife.model.pet.PetType
 class MainActivity : AppCompatActivity() {
     private val amb: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    private val petList: MutableList<Pet> = mutableListOf()
+
+    private val petAdapter: PetAdapter by lazy {
+        PetAdapter(this,petList)
+    }
+
+    private val mainController:MainController by lazy {
+        MainController(this)
     }
 
     private lateinit var petLauncher: ActivityResultLauncher<Intent>
@@ -33,6 +44,9 @@ class MainActivity : AppCompatActivity() {
             it.subtitle = "Pet List"
             setSupportActionBar(it)
         }
+
+        fillPetList()
+
 
         piarl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -99,6 +113,16 @@ class MainActivity : AppCompatActivity() {
         amb.typeTv.text = pet.type.name
         amb.colorTv.text = pet.color
         amb.sizeTv.text = pet.size.name
+    }
+
+    private fun fillPetList(){
+        Thread{
+            runOnUiThread{
+                petList.clear()
+                petList.addAll(mainController.getPets())
+                petAdapter.notifyDataSetChanged()
+            }
+        }.start()
     }
 
 }
