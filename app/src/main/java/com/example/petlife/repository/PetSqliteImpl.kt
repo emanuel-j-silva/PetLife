@@ -1,12 +1,16 @@
 package com.example.petlife.repository
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.database.Cursor
+import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.example.petlife.R
 import com.example.petlife.model.pet.Pet
-import java.sql.SQLException
+import com.example.petlife.model.pet.PetType
+import com.example.petlife.model.pet.Size
 
 class PetSqliteImpl(context: Context): PetDAO {
 
@@ -41,12 +45,19 @@ class PetSqliteImpl(context: Context): PetDAO {
         }
     }
 
-    override fun createPet(pet: Pet): Long {
-        TODO("Not yet implemented")
-    }
+    override fun createPet(pet: Pet) =
+        petDatabase.insert(PET_TABLE,null,petToContentValue(pet))
 
     override fun findPet(name: String): Pet {
-        TODO("Not yet implemented")
+        val cursor = petDatabase.query(
+            true, PET_TABLE,null,"$NAME_COLUMN = ?", arrayOf(name),
+            null,null,null,null
+        )
+        return if (cursor.moveToFirst()){
+            cursorToPet(cursor)
+        }else{
+            Pet()
+        }
     }
 
     override fun findAllPets(): MutableList<Pet> {
@@ -60,4 +71,25 @@ class PetSqliteImpl(context: Context): PetDAO {
     override fun deletePet(name: String): Int {
         TODO("Not yet implemented")
     }
+
+    private fun petToContentValue(pet: Pet) = ContentValues().apply {
+        with(pet) {
+            put(NAME_COLUMN, name)
+            put(BIRTH_DATE_COLUMN, birthDate)
+            put(TYPE_COLUMN, type.name)
+            put(COLOR_COLUMN, color)
+            put(SIZE_COLUMN, size.name)
+        }
+    }
+
+    private fun cursorToPet(cursor: Cursor) = with(cursor){
+        Pet(
+            getString(getColumnIndexOrThrow(NAME_COLUMN)),
+            getString(getColumnIndexOrThrow(BIRTH_DATE_COLUMN)),
+            PetType.valueOf(getString(getColumnIndexOrThrow(TYPE_COLUMN))),
+            getString(getColumnIndexOrThrow(COLOR_COLUMN)),
+            Size.valueOf(getString(getColumnIndexOrThrow(SIZE_COLUMN)))
+        )
+    }
+
 }
