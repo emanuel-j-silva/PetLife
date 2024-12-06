@@ -20,188 +20,21 @@
         android:id="@+id/subtitleTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Informações do Pet"
+        android:text="Lista de Pets"
         android:textSize="20sp"
         android:gravity="center_horizontal"
         android:padding="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbarIn" />
-
-    <TextView
-        android:id="@+id/nameTitleTv"
+    
+    <ListView
+        android:id="@+id/petsLv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Nome do Pet"
-        android:textSize="15sp"
-        android:padding="5sp"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subtitleTv" />
 
-    <TextView
-        android:id="@+id/nameTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nome"
-        android:textSize="10sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nameTitleTv" />
-
-    <TextView
-        android:id="@+id/birthTitleTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Data de nascimento"
-        android:textSize="15sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nameTv" />
-
-    <TextView
-        android:id="@+id/birthTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Data de nascimento"
-        android:textSize="10sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/birthTitleTv" />
-
-    <TextView
-        android:id="@+id/typeTitleTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tipo"
-        android:textSize="15sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/birthTv" />
-
-    <TextView
-        android:id="@+id/typeTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Tipo"
-        android:textSize="10sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/typeTitleTv" />
-
-    <TextView
-        android:id="@+id/colorTitleTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cor"
-        android:textSize="15sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/typeTv" />
-
-    <TextView
-        android:id="@+id/colorTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Cor"
-        android:textSize="10sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/colorTitleTv" />
-
-    <TextView
-        android:id="@+id/sizeTitleTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Porte"
-        android:textSize="15sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/colorTv" />
-
-    <TextView
-        android:id="@+id/sizeTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Porte"
-        android:textSize="10sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sizeTitleTv" />
-
-    <TextView
-        android:id="@+id/lastVeterinarianTitleTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Última ida ao veterinário"
-        android:textSize="15sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sizeTv" />
-
-    <TextView
-        android:id="@+id/lastVeterinarianTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Ida ao veterinário"
-        android:textSize="10sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lastVeterinarianTitleTv" />
-
-    <TextView
-        android:id="@+id/lastPetshopTitleTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Última ida ao pet shop"
-        android:textSize="15sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lastVeterinarianTv" />
-
-    <TextView
-        android:id="@+id/lastPetshopTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Ida ao pet shop"
-        android:textSize="10sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lastPetshopTitleTv" />
-
-    <TextView
-        android:id="@+id/lastVaccinationTitleTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Última vacinação"
-        android:textSize="15sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lastPetshopTv" />
-
-    <TextView
-        android:id="@+id/lastVaccinationTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Vacinação"
-        android:textSize="10sp"
-        android:padding="5sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lastVaccinationTitleTv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
