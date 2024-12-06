@@ -54,35 +54,10 @@ class MainActivity : AppCompatActivity() {
             setSupportActionBar(it)
         }
 
-        pcarl = registerForActivityResult(ActivityResultContracts.RequestPermission())
-        { permission ->
-            if (permission) {
-                callOrDisc(true)
-            }
-            else {
-                Toast.makeText(this, "Permissão necessária!", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        amb.callBt.setOnClickListener{
-            callOrDisc(false)
-        }
-
         piarl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 result.data?.data?.let {
                     startActivity(Intent(ACTION_VIEW, it))
-                }
-            }
-        }
-
-        amb.siteBt.setOnClickListener{
-            Uri.parse(amb.siteTv.text.toString()).let { url ->
-                Intent(ACTION_VIEW, url).let { navIntent ->
-                    val chooseAppIntent = Intent(ACTION_CHOOSER)
-                    chooseAppIntent.putExtra(EXTRA_TITLE, "Escolha seu navegador")
-                    chooseAppIntent.putExtra(EXTRA_INTENT, navIntent)
-                    startActivity(chooseAppIntent)
                 }
             }
         }
@@ -124,8 +99,6 @@ class MainActivity : AppCompatActivity() {
                     lastVeterinarianVisit?.let {
                         amb.lastVeterinarianTv.text = lastVeterinarianVisit
                     }
-                    phone?.let { amb.telephoneTv.text = phone }
-                    site?.let { amb.siteTv.text = site }
                 }
             }
 
@@ -213,15 +186,6 @@ class MainActivity : AppCompatActivity() {
         amb.typeTv.text = pet.type.name
         amb.colorTv.text = pet.color
         amb.sizeTv.text = pet.size.name
-    }
-
-    private fun callOrDisc(call: Boolean) {
-        Uri.parse("tel: ${amb.telephoneTv.text}").let {
-            Intent(if (call) ACTION_CALL else ACTION_DIAL).apply {
-                data = it
-                startActivity(this)
-            }
-        }
     }
 
 }
