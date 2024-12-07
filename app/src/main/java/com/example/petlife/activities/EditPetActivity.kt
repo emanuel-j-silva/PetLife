@@ -3,9 +3,13 @@ package com.example.petlife.activities
 import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petlife.databinding.ActivityEditPetBinding
+import com.example.petlife.model.Constant.PET
+import com.example.petlife.model.Constant.VIEW_MODE
 import com.example.petlife.model.pet.Pet
 import com.example.petlife.model.pet.Size
 import com.example.petlife.model.pet.PetType
@@ -15,14 +19,14 @@ class EditPetActivity : AppCompatActivity() {
         ActivityEditPetBinding.inflate(layoutInflater)
     }
 
-    private var pet: Pet? = null
-
     private lateinit var typeAdapter: ArrayAdapter<PetType>
     private lateinit var sizeAdapter: ArrayAdapter<Size>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(apb.root)
+
+        val viewMode = intent.getBooleanExtra(VIEW_MODE, false)
 
         typeAdapter = ArrayAdapter(this, R.layout.simple_spinner_item,
             PetType.entries)
@@ -34,47 +38,58 @@ class EditPetActivity : AppCompatActivity() {
         sizeAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         apb.sizeSp.adapter = sizeAdapter
 
-        pet = Pet(
-            name = intent.getStringExtra("name") ?: "",
-            birthDate = intent.getStringExtra("birthDate") ?: "",
-            type = intent.getStringExtra("type")?.let { PetType.valueOf(it) } ?: PetType.DOG,
-            color = intent.getStringExtra("color") ?: "",
-            size = intent.getStringExtra("size")?.let { Size.valueOf(it) } ?: Size.MEDIUM
-        )
+        val receivedPet = intent.getParcelableExtra<Pet>(PET)
+        receivedPet?.let { pet ->
+            with(apb){
+                with(pet){
+                    nameEt.setText(name)
+                    nameEt.isEnabled = false
+                    birthEt.setText(birthDate)
+                    val typePosition = typeAdapter.getPosition(pet.type)
+                    typeSp.setSelection(typePosition)
+                    colorEt.setText(color)
+                    val sizePosition = sizeAdapter.getPosition(pet.size)
+                    sizeSp.setSelection(sizePosition)
 
-        pet?.let { fillEditFields(it) }
-
-        apb.saveBt.setOnClickListener{
-            pet = Pet(
-                name = apb.nameEt.text.toString(),
-                birthDate = apb.birthEt.text.toString(),
-                type = PetType.valueOf(apb.typeSp.selectedItem.toString()),
-                color = apb.colorEt.text.toString(),
-                size = Size.valueOf(apb.sizeSp.selectedItem.toString())
-            )
-
-            val resultIntent = Intent().apply {
-                putExtra("name", pet?.name)
-                putExtra("birthDate", pet?.birthDate)
-                putExtra("type", pet?.type?.name)
-                putExtra("color", pet?.color)
-                putExtra("size", pet?.size?.name)
+                    nameEt.isEnabled = !viewMode
+                    birthEt.isEnabled = !viewMode
+                    typeSp.isEnabled = !viewMode
+                    colorEt.isEnabled = !viewMode
+                    sizeSp.isEnabled = !viewMode
+                    saveBt.visibility = if (viewMode) GONE else VISIBLE
+                }
             }
-            setResult(RESULT_OK,resultIntent)
-            finish()
         }
 
-    }
-    private fun fillEditFields(pet: Pet){
-        apb.nameEt.setText(pet.name)
-        apb.birthEt.setText(pet.birthDate)
+        apb.toolbarTb.toolbar.let {
+            it.subtitle = if (receivedPet == null)
+                "New Pet"
+            else
+                if (viewMode)
+                    "Pet details"
+                else
+                    "Edit Pet"
 
-        val typePosition = typeAdapter.getPosition(pet.type)
-        apb.typeSp.setSelection(typePosition)
+            setSupportActionBar(it)
+        }
 
-        apb.colorEt.setText(pet.color)
+       apb.run {
+           saveBt.setOnClickListener{
+               Pet(
+                   name = nameEt.text.toString(),
+                   birthDate = birthEt.text.toString(),
+                   type = PetType.valueOf(typeSp.selectedItem.toString()),
+                   color = colorEt.text.toString(),
+                   size = Size.valueOf(sizeSp.selectedItem.toString())
+               ).let { pet ->
+                   Intent().apply {
+                       putExtra(PET, pet)
+                       setResult(RESULT_OK,this)
+                       finish()
+                   }
+               }
+           }
+       }
 
-        val sizePosition = sizeAdapter.getPosition(pet.size)
-        apb.sizeSp.setSelection(sizePosition)
     }
 }

@@ -7,16 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".activities.EditPetActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <include
         android:id="@+id/toolbarTb"
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        app:titleTextColor="@color/white"
-        app:subtitleTextColor="@color/white"
-        android:background="@color/design_default_color_primary"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/subtitleTv"
