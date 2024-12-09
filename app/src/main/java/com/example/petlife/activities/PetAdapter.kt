@@ -8,13 +8,18 @@ import com.example.petlife.model.pet.Pet
 
 class PetAdapter(
     private val petList: List<Pet>,
-    private val onContextMenuRequested: (Int) -> Unit
+    private val onContextMenuRequested: (Int) -> Unit,
+    private val onItemClick: (Int) -> Unit
 ) : RecyclerView.Adapter<PetAdapter.PetViewHolder>() {
 
     inner class PetViewHolder(val binding: TilePetBinding) : RecyclerView.ViewHolder(binding.root),
         View.OnCreateContextMenuListener {
 
         init {
+            binding.root.setOnClickListener {
+                onItemClick(adapterPosition)
+            }
+
             binding.root.setOnCreateContextMenuListener(this)
         }
 

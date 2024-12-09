@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                         petList[position] = receivedPet
                         mainController.modifyPet(receivedPet)
                     }
+                    petAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -67,9 +68,19 @@ class MainActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.petsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        petAdapter = PetAdapter(petList) { position ->
-            selectedPosition = position
-        }
+        petAdapter = PetAdapter(
+            petList,
+            onContextMenuRequested = { position ->
+                selectedPosition = position
+            },
+            onItemClick = { position ->
+                Intent(this, EditPetActivity::class.java).apply {
+                    putExtra(PET, petList[position])
+                    putExtra(VIEW_MODE, true)
+                    startActivity(this)
+                }
+            }
+        )
         recyclerView.adapter = petAdapter
 
         registerForContextMenu(recyclerView)
