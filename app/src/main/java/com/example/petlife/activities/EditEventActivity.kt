@@ -62,17 +62,21 @@ class EditEventActivity : AppCompatActivity() {
         }
 
         aeb.run {
-            saveBt.setOnClickListener{
-                Event(
+            saveBt.setOnClickListener {
+                val updatedEvent = receivedEvent?.copy(
                     type = EventType.valueOf(typeSp.selectedItem.toString()),
                     description = descriptionEt.text.toString(),
                     date = dateEt.text.toString()
-                    ).let { event ->
-                    Intent().apply {
-                        putExtra(EVENT, event)
-                        setResult(RESULT_OK,this)
-                        finish()
-                    }
+                ) ?: Event(
+                    type = EventType.valueOf(typeSp.selectedItem.toString()),
+                    description = descriptionEt.text.toString(),
+                    date = dateEt.text.toString()
+                )
+
+                Intent().apply {
+                    putExtra(EVENT, updatedEvent)
+                    setResult(RESULT_OK, this)
+                    finish()
                 }
             }
         }
