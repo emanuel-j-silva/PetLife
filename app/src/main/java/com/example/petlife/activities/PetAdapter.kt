@@ -1,34 +1,38 @@
-package com.example.petlife.activities
-
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.petlife.R
+import com.example.petlife.databinding.TilePetBinding
 import com.example.petlife.model.pet.Pet
 
-// PetAdapter.kt
-class PetAdapter(private val petList: List<Pet>) : RecyclerView.Adapter<PetAdapter.PetViewHolder>() {
+class PetAdapter(
+    private val petList: List<Pet>,
+    private val onContextMenuRequested: (Int) -> Unit
+) : RecyclerView.Adapter<PetAdapter.PetViewHolder>() {
 
-    // ViewHolder para representar cada item da lista
-    inner class PetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val petNameTextView: TextView = itemView.findViewById(R.id.nameItemTv)
-        val petTypeTextView: TextView = itemView.findViewById(R.id.typeItemTv)
+    inner class PetViewHolder(val binding: TilePetBinding) : RecyclerView.ViewHolder(binding.root),
+        View.OnCreateContextMenuListener {
+
+        init {
+            binding.root.setOnCreateContextMenuListener(this)
+        }
+
+        override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+            onContextMenuRequested(adapterPosition)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PetViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.tile_pet, parent, false)
-        return PetViewHolder(view)
+        val binding = TilePetBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return PetViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: PetViewHolder, position: Int) {
         val pet = petList[position]
-        holder.petNameTextView.text = pet.name
-        holder.petTypeTextView.text = pet.type.name
+        holder.binding.nameItemTv.text = pet.name
+        holder.binding.typeItemTv.text = pet.type.name
     }
 
-    override fun getItemCount(): Int {
-        return petList.size
-    }
+    override fun getItemCount(): Int = petList.size
 }

@@ -1,5 +1,6 @@
 package com.example.petlife.activities
 
+import PetAdapter
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -7,7 +8,6 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +25,9 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    private var selectedPosition: Int = -1
     private val petList: MutableList<Pet> = mutableListOf()
+    private lateinit var petAdapter: PetAdapter
 
     private val mainController:MainController by lazy {
         MainController(this)
@@ -36,10 +38,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(amb.root)
-
-        val recyclerView: RecyclerView = findViewById(R.id.petsRecyclerView)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
 
         parl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -66,12 +64,17 @@ class MainActivity : AppCompatActivity() {
             setSupportActionBar(it)
         }
 
-        fillPetList()
+        val recyclerView: RecyclerView = findViewById(R.id.petsRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val petAdapter = PetAdapter(petList)
+        petAdapter = PetAdapter(petList) { position ->
+            selectedPosition = position
+        }
         recyclerView.adapter = petAdapter
 
-        registerForContextMenu(amb.petsRecyclerView)
+        registerForContextMenu(recyclerView)
+
+        fillPetList()
 
     }
 
@@ -99,34 +102,33 @@ class MainActivity : AppCompatActivity() {
         menuInfo: ContextMenu.ContextMenuInfo?
     ) = menuInflater.inflate(R.menu.context_menu_main, menu)
 
-
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        val position = (item.menuInfo as AdapterView.AdapterContextMenuInfo).position
-        return when(item.itemId){
+        return when (item.itemId) {
             R.id.editPetMi -> {
-                Intent(this,EditPetActivity::class.java).apply {
-                    putExtra(PET,petList[position])
-                    putExtra(VIEW_MODE,false)
+                val petToEdit = petList[selectedPosition]
+                Intent(this, EditPetActivity::class.java).apply {
+                    putExtra(PET, petToEdit)
+                    putExtra(VIEW_MODE, false)
                     parl.launch(this)
                 }
                 true
             }
             R.id.removePetMi -> {
-                mainController.removePet(petList[position].name)
-                petList.removeAt(position)
+                val petToRemove = petList[selectedPosition]
+                mainController.removePet(petToRemove.name)
+                petList.removeAt(selectedPosition)
+                petAdapter.notifyItemRemoved(selectedPosition)
                 true
             }
-            else -> {
-                false
-            }
+            else -> super.onContextItemSelected(item)
         }
     }
-
 
     private fun fillPetList() {
         val allPets = mainController.getPets()
         petList.clear()
         petList.addAll(allPets)
+        petAdapter.notifyDataSetChanged()
     }
 
 }
