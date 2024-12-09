@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         menu: ContextMenu?,
         v: View?,
         menuInfo: ContextMenu.ContextMenuInfo?
-    ) = menuInflater.inflate(R.menu.add_item_menu, menu)
+    ) = menuInflater.inflate(R.menu.context_menu_main, menu)
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val position = (item.menuInfo as AdapterContextMenuInfo).position
