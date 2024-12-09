@@ -44,24 +44,38 @@ class ListEventsActivity : AppCompatActivity() {
 
         parl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                val event = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU){
-                    result.data?.getParcelableExtra<Event>(EVENT)
-                }else{
-                    result.data?.getParcelableExtra(EVENT, Event::class.java)
+                val receivedPet = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    result.data?.getParcelableExtra<Pet>(PET)
+                } else {
+                    result.data?.getParcelableExtra(PET, Pet::class.java)
                 }
-                event?.let { receivedEvent ->
-                    val position = eventList.indexOfFirst { it.id == receivedEvent.id }
-                    if (position == -1){
-                        eventList.add(receivedEvent)
-                        eventController.insertEvent(TODO(),receivedEvent)
-                    }else{
-                        eventList[position] = receivedEvent
-                        eventController.updateEvent(receivedEvent)
+
+                receivedPet?.let { pet ->
+                    fillEventList(pet.name)
+
+                    val receivedEvent = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                        result.data?.getParcelableExtra<Event>(EVENT)
+                    } else {
+                        result.data?.getParcelableExtra(EVENT, Event::class.java)
                     }
-                    eventAdapter.notifyDataSetChanged()
+
+                    receivedEvent?.let { event ->
+                        val position = eventList.indexOfFirst { it.id == event.id }
+                        if (position == -1) {
+                            eventList.add(event)
+                            eventController.insertEvent(pet.name, event) // Use pet.name para passar o nome
+                        } else {
+                            eventList[position] = event
+                            eventController.updateEvent(event)
+                        }
+                        eventAdapter.notifyDataSetChanged()
+                    }
+                } ?: run {
+                    finish()
                 }
             }
         }
+
 
         aleb.toolbarIn.toolbar.let {
             it.subtitle = "Events List"
@@ -87,8 +101,6 @@ class ListEventsActivity : AppCompatActivity() {
         recyclerView.adapter = eventAdapter
 
         registerForContextMenu(recyclerView)
-
-        fillEventList()
 
     }
 

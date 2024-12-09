@@ -74,9 +74,8 @@ class MainActivity : AppCompatActivity() {
                 selectedPosition = position
             },
             onItemClick = { position ->
-                Intent(this, EditPetActivity::class.java).apply {
+                Intent(this, ListEventsActivity::class.java).apply {
                     putExtra(PET, petList[position])
-                    putExtra(VIEW_MODE, true)
                     startActivity(this)
                 }
             }
