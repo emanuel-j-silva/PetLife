@@ -6,13 +6,13 @@
     android:padding="10sp">
 
     <TextView
-        android:id="@+id/nameTv"
+        android:id="@+id/nameItemTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Name"
         android:textSize="25sp" />
     <TextView
-        android:id="@+id/typeTv"
+        android:id="@+id/typeItemTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Type" />

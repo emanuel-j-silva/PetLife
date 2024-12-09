@@ -7,10 +7,12 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView.AdapterContextMenuInfo
+import android.widget.AdapterView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.petlife.R
 import com.example.petlife.controller.MainController
 import com.example.petlife.databinding.ActivityMainBinding
@@ -25,10 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     private val petList: MutableList<Pet> = mutableListOf()
 
-    private val petAdapter: PetAdapter by lazy {
-        PetAdapter(this,petList)
-    }
-
     private val mainController:MainController by lazy {
         MainController(this)
     }
@@ -38,6 +36,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(amb.root)
+
+        val recyclerView: RecyclerView = findViewById(R.id.petsRecyclerView)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
         parl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -55,7 +57,6 @@ class MainActivity : AppCompatActivity() {
                         petList[position] = receivedPet
                         mainController.modifyPet(receivedPet)
                     }
-                    petAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -67,16 +68,10 @@ class MainActivity : AppCompatActivity() {
 
         fillPetList()
 
-        amb.petsLv.adapter = petAdapter
-        amb.petsLv.setOnItemClickListener { _, _, position, _ ->
-            Intent(this, EditPetActivity::class.java).apply {
-                putExtra(PET, petList[position])
-                putExtra(VIEW_MODE, true)
-                startActivity(this)
-            }
-        }
+        val petAdapter = PetAdapter(petList)
+        recyclerView.adapter = petAdapter
 
-        registerForContextMenu(amb.petsLv)
+        registerForContextMenu(amb.petsRecyclerView)
 
     }
 
@@ -104,8 +99,9 @@ class MainActivity : AppCompatActivity() {
         menuInfo: ContextMenu.ContextMenuInfo?
     ) = menuInflater.inflate(R.menu.context_menu_main, menu)
 
+
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        val position = (item.menuInfo as AdapterContextMenuInfo).position
+        val position = (item.menuInfo as AdapterView.AdapterContextMenuInfo).position
         return when(item.itemId){
             R.id.editPetMi -> {
                 Intent(this,EditPetActivity::class.java).apply {
@@ -118,7 +114,6 @@ class MainActivity : AppCompatActivity() {
             R.id.removePetMi -> {
                 mainController.removePet(petList[position].name)
                 petList.removeAt(position)
-                petAdapter.notifyDataSetChanged()
                 true
             }
             else -> {
@@ -127,14 +122,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun fillPetList(){
-        Thread{
-            runOnUiThread{
-                petList.clear()
-                petList.addAll(mainController.getPets())
-                petAdapter.notifyDataSetChanged()
-            }
-        }.start()
+
+    private fun fillPetList() {
+        val allPets = mainController.getPets()
+        petList.clear()
+        petList.addAll(allPets)
     }
 
 }
