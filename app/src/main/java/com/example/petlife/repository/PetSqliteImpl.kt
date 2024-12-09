@@ -106,6 +106,7 @@ class PetSqliteImpl(context: Context): PetDAO {
 
     override fun addEvent(petName: String, event: Event): Long {
         return ContentValues().apply {
+            put(EVENT_TYPE_COLUMN, event.type.name)
             put(EVENT_DESCRIPTION_COLUMN, event.description)
             put(EVENT_DATE_COLUMN, event.date)
             put(PET_NAME_COLUMN, petName)
@@ -129,6 +130,7 @@ class PetSqliteImpl(context: Context): PetDAO {
     override fun updateEvent(event: Event) = petDatabase.update(
         EVENT_TABLE,
         ContentValues().apply {
+            put(EVENT_TYPE_COLUMN, event.type.name)
             put(EVENT_DESCRIPTION_COLUMN, event.description)
             put(EVENT_DATE_COLUMN, event.date)
         },
