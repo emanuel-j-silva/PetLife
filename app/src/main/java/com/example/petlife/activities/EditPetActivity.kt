@@ -42,6 +42,12 @@ class EditPetActivity : AppCompatActivity() {
         receivedPet?.let { pet ->
             with(apb){
                 with(pet){
+                    nameEt.isEnabled = !viewMode
+                    birthEt.isEnabled = !viewMode
+                    typeSp.isEnabled = !viewMode
+                    colorEt.isEnabled = !viewMode
+                    sizeSp.isEnabled = !viewMode
+
                     nameEt.setText(name)
                     nameEt.isEnabled = false
                     birthEt.setText(birthDate)
@@ -51,11 +57,6 @@ class EditPetActivity : AppCompatActivity() {
                     val sizePosition = sizeAdapter.getPosition(pet.size)
                     sizeSp.setSelection(sizePosition)
 
-                    nameEt.isEnabled = !viewMode
-                    birthEt.isEnabled = !viewMode
-                    typeSp.isEnabled = !viewMode
-                    colorEt.isEnabled = !viewMode
-                    sizeSp.isEnabled = !viewMode
                     saveBt.visibility = if (viewMode) GONE else VISIBLE
                 }
             }
