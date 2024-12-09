@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             },
             onItemClick = { position ->
                 Intent(this, ListEventsActivity::class.java).apply {
-                    putExtra(PET, petList[position])
+                    putExtra(PET, petList[position].name)
                     startActivity(this)
                 }
             }

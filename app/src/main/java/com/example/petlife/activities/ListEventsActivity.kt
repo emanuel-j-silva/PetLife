@@ -7,6 +7,7 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -14,14 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petlife.R
 import com.example.petlife.adapter.EventAdapter
-import com.example.petlife.adapter.PetAdapter
 import com.example.petlife.controller.EventController
 import com.example.petlife.databinding.ActivityListEventsBinding
 import com.example.petlife.model.Constant.EVENT
 import com.example.petlife.model.Constant.PET
 import com.example.petlife.model.Constant.VIEW_MODE
 import com.example.petlife.model.event.Event
-import com.example.petlife.model.pet.Pet
 
 class ListEventsActivity : AppCompatActivity() {
     private val aleb: ActivityListEventsBinding by lazy {
@@ -41,41 +40,6 @@ class ListEventsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(aleb.root)
-
-        parl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val receivedPet = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                    result.data?.getParcelableExtra<Pet>(PET)
-                } else {
-                    result.data?.getParcelableExtra(PET, Pet::class.java)
-                }
-
-                receivedPet?.let { pet ->
-                    fillEventList(pet.name)
-
-                    val receivedEvent = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                        result.data?.getParcelableExtra<Event>(EVENT)
-                    } else {
-                        result.data?.getParcelableExtra(EVENT, Event::class.java)
-                    }
-
-                    receivedEvent?.let { event ->
-                        val position = eventList.indexOfFirst { it.id == event.id }
-                        if (position == -1) {
-                            eventList.add(event)
-                            eventController.insertEvent(pet.name, event) // Use pet.name para passar o nome
-                        } else {
-                            eventList[position] = event
-                            eventController.updateEvent(event)
-                        }
-                        eventAdapter.notifyDataSetChanged()
-                    }
-                } ?: run {
-                    finish()
-                }
-            }
-        }
-
 
         aleb.toolbarIn.toolbar.let {
             it.subtitle = "Events List"
@@ -101,6 +65,37 @@ class ListEventsActivity : AppCompatActivity() {
         recyclerView.adapter = eventAdapter
 
         registerForContextMenu(recyclerView)
+
+        val petName = intent.getStringExtra(PET);
+        if (petName.isNullOrEmpty()) {
+            Toast.makeText(this, "Pet name not found", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }else{
+            fillEventList(petName)
+        }
+
+        parl = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val receivedEvent = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    result.data?.getParcelableExtra<Event>(EVENT)
+                } else {
+                    result.data?.getParcelableExtra(EVENT, Event::class.java)
+                }
+
+                receivedEvent?.let { event ->
+                    val position = eventList.indexOfFirst { it.id == event.id }
+                    if (position == -1) {
+                        eventList.add(event)
+                        eventController.insertEvent(petName, event)
+                    } else {
+                        eventList[position] = event
+                        eventController.updateEvent(event)
+                    }
+                    eventAdapter.notifyDataSetChanged()
+                }
+            }
+        }
 
     }
 

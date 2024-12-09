@@ -9,13 +9,9 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petlife.databinding.ActivityEditEventBinding
 import com.example.petlife.model.Constant.EVENT
-import com.example.petlife.model.Constant.PET
 import com.example.petlife.model.Constant.VIEW_MODE
 import com.example.petlife.model.event.Event
 import com.example.petlife.model.event.EventType
-import com.example.petlife.model.pet.Pet
-import com.example.petlife.model.pet.PetType
-import com.example.petlife.model.pet.Size
 
 class EditEventActivity : AppCompatActivity() {
     private val aeb: ActivityEditEventBinding by lazy {
@@ -80,6 +76,5 @@ class EditEventActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 }
