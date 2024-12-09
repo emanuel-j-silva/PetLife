@@ -1,6 +1,6 @@
 package com.example.petlife.activities
 
-import PetAdapter
+import com.example.petlife.adapter.PetAdapter
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
