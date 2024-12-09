@@ -4,6 +4,6 @@
         android:id="@+id/editEventMi"
         android:title="Editar Evento" />
     <item
-        android:id="@+id/removePetMi"
+        android:id="@+id/removeEventMi"
         android:title="Remover Evento" />
 </menu>
