@@ -31,6 +31,7 @@ class PetSqliteImpl(context: Context): PetDAO {
         private const val EVENT_TYPE_COLUMN = "event_type"
         private const val EVENT_DESCRIPTION_COLUMN = "description"
         private const val EVENT_DATE_COLUMN = "date"
+        private const val EVENT_TIME_COLUMN = "time"
         private const val PET_NAME_COLUMN = "pet_name"
 
         private const val CREATE_PET_TABLE_STATEMENT =
@@ -47,6 +48,7 @@ class PetSqliteImpl(context: Context): PetDAO {
                     "$EVENT_TYPE_COLUMN TEXT NOT NULL," +
                     "$EVENT_DESCRIPTION_COLUMN TEXT NOT NULL," +
                     "$EVENT_DATE_COLUMN TEXT NOT NULL," +
+                    "$EVENT_TIME_COLUMN TEXT," +
                     "$PET_NAME_COLUMN TEXT NOT NULL," +
                     "FOREIGN KEY($PET_NAME_COLUMN) REFERENCES $PET_TABLE($NAME_COLUMN) " +
                     "ON DELETE CASCADE);"
@@ -109,6 +111,7 @@ class PetSqliteImpl(context: Context): PetDAO {
             put(EVENT_TYPE_COLUMN, event.type.name)
             put(EVENT_DESCRIPTION_COLUMN, event.description)
             put(EVENT_DATE_COLUMN, event.date)
+            put(EVENT_TIME_COLUMN, event.time)
             put(PET_NAME_COLUMN, petName)
         }.let {
             petDatabase.insert(EVENT_TABLE, null, it)
@@ -133,6 +136,7 @@ class PetSqliteImpl(context: Context): PetDAO {
             put(EVENT_TYPE_COLUMN, event.type.name)
             put(EVENT_DESCRIPTION_COLUMN, event.description)
             put(EVENT_DATE_COLUMN, event.date)
+            put(EVENT_TIME_COLUMN, event.time)
         },
         "$EVENT_ID_COLUMN = ?",
         arrayOf(event.id.toString())
@@ -167,7 +171,8 @@ class PetSqliteImpl(context: Context): PetDAO {
             id = getLong(getColumnIndexOrThrow(EVENT_ID_COLUMN)),
             type = EventType.valueOf(getString(getColumnIndexOrThrow(EVENT_TYPE_COLUMN))),
             description = getString(getColumnIndexOrThrow(EVENT_DESCRIPTION_COLUMN)),
-            date = getString(getColumnIndexOrThrow(EVENT_DATE_COLUMN))
+            date = getString(getColumnIndexOrThrow(EVENT_DATE_COLUMN)),
+            time = getString(getColumnIndexOrThrow(EVENT_TIME_COLUMN))
         )
     }
 }
